@@ -1,0 +1,10 @@
+{
+    "flip_mode": true,
+    "enhance_brightness_mode": true,
+    "enhance_contrast_mode": true,
+    "sharpen_image_mode": true,
+    "edge_enhance_mode": true,
+    "gamma_correct_mode": true,
+    "equalize_mode": true,
+    "save_original": false
+}
