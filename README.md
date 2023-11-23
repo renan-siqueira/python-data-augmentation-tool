@@ -24,7 +24,7 @@ This project is an image processing and augmentation tool designed to apply vari
 1. **Clone the Repository**
 
 ```bash
-git clone https://your-repository-url.git
+git clone https://github.com/renan-siqueira/python-data-augmentation-tool.git
 cd your-repository-directory
 ```
 
