@@ -3,10 +3,10 @@
 __pycache__
 
 config.py
+params.json
 
 data*
 
 *jpg
 *png
 
-params.json
