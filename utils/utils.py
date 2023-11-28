@@ -137,42 +137,37 @@ def preprocess_and_augment_image(image_path, output_path, **kwargs):
     output_path (str): Path to save the processed image.
     kwargs: Various processing options as keyword arguments.
     """
-    img = Image.open(image_path)
-    list_images = []
+    original_img = Image.open(image_path)
 
     if kwargs.get("save_original", False):
-        img.save(output_path)
+        original_img.save(output_path)
 
     if kwargs.get("flip_mode", False):
-        img_flipped = flip(img.copy())
+        img_flipped = flip(original_img.copy())
         img_flipped.save(os.path.splitext(output_path)[0] + '_flipped.png')
-        list_images.append(img_flipped)
-    else:
-        list_images.append(img.copy())
 
-    for n, image in enumerate(list_images):
-        if kwargs.get("enhance_brightness_mode", False):
-            for i in range(3, 4):
-                bright_img = enhance_brightness(image.copy(), i)
-                bright_img.save(os.path.splitext(output_path)[0] + f'_{n}_bright_{i}.png')
+    if kwargs.get("enhance_brightness_mode", False):
+        for i in range(3, 4):
+            bright_img = enhance_brightness(original_img.copy(), i)
+            bright_img.save(os.path.splitext(output_path)[0] + f'_bright_{i}.png')
 
-        if kwargs.get("enhance_contrast_mode", False):
-            for i in range(3, 4):
-                contrast_img = enhance_contrast(image.copy(), i)
-                contrast_img.save(os.path.splitext(output_path)[0] + f'_{n}_contrast_{i}.png')
+    if kwargs.get("enhance_contrast_mode", False):
+        for i in range(3, 4):
+            contrast_img = enhance_contrast(original_img.copy(), i)
+            contrast_img.save(os.path.splitext(output_path)[0] + f'_contrast_{i}.png')
 
-        if kwargs.get("sharpen_image_mode", False):
-            sharpened_img = sharpen(image.copy())
-            sharpened_img.save(os.path.splitext(output_path)[0] + f'_{n}_sharpened.png')
+    if kwargs.get("sharpen_image_mode", False):
+        sharpened_img = sharpen(original_img.copy())
+        sharpened_img.save(os.path.splitext(output_path)[0] + '_sharpened.png')
 
-        if kwargs.get("edge_enhance_mode", False):
-            edge_enhanced_img = edge_enhance(image.copy())
-            edge_enhanced_img.save(os.path.splitext(output_path)[0] + f'_{n}_edge_enhanced.png')
+    if kwargs.get("edge_enhance_mode", False):
+        edge_enhanced_img = edge_enhance(original_img.copy())
+        edge_enhanced_img.save(os.path.splitext(output_path)[0] + '_edge_enhanced.png')
 
-        if kwargs.get("gamma_correct_mode", False):
-            gamma_corrected_img = gamma_correction(image.copy(), 1.2)
-            gamma_corrected_img.save(os.path.splitext(output_path)[0] + f'_{n}_gamma_corrected.png')
+    if kwargs.get("gamma_correct_mode", False):
+        gamma_corrected_img = gamma_correction(original_img.copy(), 1.2)
+        gamma_corrected_img.save(os.path.splitext(output_path)[0] + '_gamma_corrected.png')
 
-        if kwargs.get("equalize_mode", False):
-            equalized_img = equalize_hist(image.copy())
-            equalized_img.save(os.path.splitext(output_path)[0] + f'_{n}_equalized.png')
+    if kwargs.get("equalize_mode", False):
+        equalized_img = equalize_hist(original_img.copy())
+        equalized_img.save(os.path.splitext(output_path)[0] + '_equalized.png')
