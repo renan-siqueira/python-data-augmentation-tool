@@ -1,10 +1,12 @@
 {
+    "desired_size": 256,
+    "save_original": false,
+    "grayscale_mode": false,
     "flip_mode": false,
-    "enhance_brightness_mode": true,
-    "enhance_contrast_mode": true,
-    "sharpen_image_mode": true,
-    "edge_enhance_mode": true,
-    "gamma_correct_mode": true,
-    "equalize_mode": true,
-    "save_original": false
+    "enhance_brightness_mode": false,
+    "enhance_contrast_mode": false,
+    "sharpen_image_mode": false,
+    "edge_enhance_mode": false,
+    "gamma_correct_mode": false,
+    "equalize_mode": false
 }
