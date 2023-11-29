@@ -28,6 +28,42 @@ def load_json_settings(file_path):
         return None
 
 
+def resize_and_pad(img, desired_size):
+    """
+    Resize and pad the image to maintain aspect ratio.
+
+    Args:
+    img (Image): An instance of PIL Image.
+    desired_size (int): Desired size (for both width and height).
+
+    Returns:
+    Image: Resized and padded image.
+    """
+    old_size = img.size
+    ratio = float(desired_size) / max(old_size)
+    new_size = tuple([int(x * ratio) for x in old_size])
+    img = img.resize(new_size, Image.Resampling.LANCZOS)
+
+    new_img = Image.new("RGB", (desired_size, desired_size))
+    new_img.paste(img, ((desired_size - new_size[0]) // 2,
+                        (desired_size - new_size[1]) // 2))
+
+    return new_img
+
+
+def convert_to_grayscale(img):
+    """
+    Convert a color image to grayscale.
+
+    Args:
+    img (Image): An instance of PIL Image in color.
+
+    Returns:
+    Image: Grayscale image.
+    """
+    return img.convert("L")
+
+
 def flip(img):
     """
     Flip the image left to right.
@@ -138,36 +174,43 @@ def preprocess_and_augment_image(image_path, output_path, **kwargs):
     kwargs: Various processing options as keyword arguments.
     """
     original_img = Image.open(image_path)
+    desired_size = kwargs.get("desired_size", 64)
+
+    resized_img = resize_and_pad(original_img, desired_size)
 
     if kwargs.get("save_original", False):
-        original_img.save(output_path)
+        resized_img.save(output_path)
+    
+    if kwargs.get("grayscale_mode", False):
+        gray_img = convert_to_grayscale(resized_img)
+        gray_img.save(os.path.splitext(output_path)[0] + '_gray.png')
 
     if kwargs.get("flip_mode", False):
-        img_flipped = flip(original_img.copy())
+        img_flipped = flip(resized_img.copy())
         img_flipped.save(os.path.splitext(output_path)[0] + '_flipped.png')
 
     if kwargs.get("enhance_brightness_mode", False):
         for i in range(3, 4):
-            bright_img = enhance_brightness(original_img.copy(), i)
+            bright_img = enhance_brightness(resized_img.copy(), i)
             bright_img.save(os.path.splitext(output_path)[0] + f'_bright_{i}.png')
 
     if kwargs.get("enhance_contrast_mode", False):
         for i in range(3, 4):
-            contrast_img = enhance_contrast(original_img.copy(), i)
+            contrast_img = enhance_contrast(resized_img.copy(), i)
             contrast_img.save(os.path.splitext(output_path)[0] + f'_contrast_{i}.png')
 
     if kwargs.get("sharpen_image_mode", False):
-        sharpened_img = sharpen(original_img.copy())
+        sharpened_img = sharpen(resized_img.copy())
         sharpened_img.save(os.path.splitext(output_path)[0] + '_sharpened.png')
 
     if kwargs.get("edge_enhance_mode", False):
-        edge_enhanced_img = edge_enhance(original_img.copy())
+        edge_enhanced_img = edge_enhance(resized_img.copy())
         edge_enhanced_img.save(os.path.splitext(output_path)[0] + '_edge_enhanced.png')
 
     if kwargs.get("gamma_correct_mode", False):
-        gamma_corrected_img = gamma_correction(original_img.copy(), 1.2)
+        gamma_corrected_img = gamma_correction(resized_img.copy(), 1.2)
         gamma_corrected_img.save(os.path.splitext(output_path)[0] + '_gamma_corrected.png')
 
     if kwargs.get("equalize_mode", False):
-        equalized_img = equalize_hist(original_img.copy())
+        equalized_img = equalize_hist(resized_img.copy())
         equalized_img.save(os.path.splitext(output_path)[0] + '_equalized.png')
