@@ -178,12 +178,11 @@ def preprocess_and_augment_image(image_path, output_path, **kwargs):
 
     resized_img = resize_and_pad(original_img, desired_size)
 
+    if kwargs.get("grayscale_mode", False):
+        resized_img = convert_to_grayscale(resized_img)
+
     if kwargs.get("save_original", False):
         resized_img.save(output_path)
-    
-    if kwargs.get("grayscale_mode", False):
-        gray_img = convert_to_grayscale(resized_img)
-        gray_img.save(os.path.splitext(output_path)[0] + '_gray.png')
 
     if kwargs.get("flip_mode", False):
         img_flipped = flip(resized_img.copy())
