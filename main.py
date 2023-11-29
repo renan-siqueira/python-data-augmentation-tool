@@ -21,7 +21,7 @@ def main(parameters, input_dir, output_dir):
     """
     os.makedirs(output_dir, exist_ok=True)
 
-    files = [f for f in os.listdir(input_dir) if f.endswith('.jpg') or f.endswith('.png')]
+    files = [f for f in os.listdir(input_dir) if f.endswith('.jpg') or f.endswith('.jpeg') or f.endswith('.png')]
     total_files = len(files)
 
     for filename in tqdm(files, total=total_files, desc="Processing images"):
