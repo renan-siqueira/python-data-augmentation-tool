@@ -21,15 +21,13 @@ def is_grayscale(img):
     bool: True if the image is in grayscale, False otherwise.
     """
     if img.mode == 'L':
-        return True  # Imagem já em escala de cinza
+        return True
 
     for pixel in img.getdata():
         if isinstance(pixel, tuple):
-            # Se o pixel for uma tupla (ex: RGB), verifica se todos os valores são iguais
             if pixel[0] != pixel[1] or pixel[0] != pixel[2]:
                 return False
         else:
-            # Se o pixel não for uma tupla, a imagem já está em escala de cinza
             continue
     return True
 
