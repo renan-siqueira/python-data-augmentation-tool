@@ -10,6 +10,30 @@ from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 import cv2
 
 
+def is_grayscale(img):
+    """
+    Check if the image is in grayscale.
+
+    Args:
+    img (Image): An instance of PIL Image.
+
+    Returns:
+    bool: True if the image is in grayscale, False otherwise.
+    """
+    if img.mode == 'L':
+        return True  # Imagem já em escala de cinza
+
+    for pixel in img.getdata():
+        if isinstance(pixel, tuple):
+            # Se o pixel for uma tupla (ex: RGB), verifica se todos os valores são iguais
+            if pixel[0] != pixel[1] or pixel[0] != pixel[2]:
+                return False
+        else:
+            # Se o pixel não for uma tupla, a imagem já está em escala de cinza
+            continue
+    return True
+
+
 def load_json_settings(file_path):
     """
     Load settings from a JSON file.
@@ -49,6 +73,23 @@ def resize_and_pad(img, desired_size):
                         (desired_size - new_size[1]) // 2))
 
     return new_img
+
+
+def convert_to_edges(original_img):
+    """
+    Convert an image to its edges version.
+
+    Args:
+    original_img (PIL.Image.Image): The original image.
+
+    Returns:
+    PIL.Image.Image: The edges version of the image.
+    """
+    cv_image = cv2.cvtColor(np.array(original_img), cv2.COLOR_RGB2BGR)
+    gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+    
+    edges = cv2.Canny(gray_image, 100, 200)
+    return Image.fromarray(edges)
 
 
 def convert_to_grayscale(img):
@@ -181,9 +222,14 @@ def preprocess_and_augment_image(image_path, output_path, **kwargs):
 
     if kwargs.get("grayscale_mode", False):
         original_img = convert_to_grayscale(original_img)
+        print('Is Gray:', is_grayscale(original_img))
 
     if kwargs.get("save_original", False):
         original_img.save(output_path)
+
+    if kwargs.get("edges_mode", False):
+        edges_img = convert_to_edges(original_img.copy())
+        edges_img.save(os.path.splitext(output_path)[0] + '_edges.png')
 
     if kwargs.get("flip_mode", False):
         img_flipped = flip(original_img.copy())
