@@ -25,7 +25,7 @@ This project is an image processing and augmentation tool designed to apply vari
 
 ```bash
 git clone https://github.com/renan-siqueira/python-data-augmentation-tool.git
-cd your-repository-directory
+cd python-data-augmentation-tool
 ```
 
 2. **Create and Activate a Virtual Environment (Optional but recommended)**

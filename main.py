@@ -19,6 +19,7 @@ def main(parameters, input_dir, output_dir):
     input_dir (str): Path to the directory containing input images.
     output_dir (str): Path to the directory where processed images will be saved.
     """
+    os.makedirs(input_dir, exist_ok=True)
     os.makedirs(output_dir, exist_ok=True)
 
     files = [f for f in os.listdir(input_dir) if f.endswith('.jpg') or f.endswith('.jpeg') or f.endswith('.png')]
